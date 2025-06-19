@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import humanizeDuration from 'humanize-duration'
 
+
 export const AppContext = createContext()
 
 export const AppContextProvider = (props)=>{
@@ -11,6 +12,8 @@ export const AppContextProvider = (props)=>{
 
     const currency = import.meta.env.VITE_CURRENCY
     const navigate =useNavigate()
+
+    
 
     const [allCourses, setAllCourses] = useState([])
     const [isEducator, setIsEducator] = useState(true)
@@ -74,6 +77,8 @@ useEffect(()=> {
     FetchAllCourses()
     fetchUserEnrolledCourses()
 },[])
+
+
 
     const value = {
         currency, allCourses, navigate, calculateRating,
