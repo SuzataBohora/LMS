@@ -87,7 +87,7 @@ useEffect(()=>{
     if(user){
         logToken
     }
-}, [])
+}, [user])
 
     const value = {
         currency, allCourses, navigate, calculateRating,

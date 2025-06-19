@@ -22,5 +22,12 @@
     "nodemon": "^3.1.10",
     "stripe": "^18.2.1",
     "svix": "^1.42.0"
+  },
+
+  "functions": {
+    "api/*.js": {
+      "maxDuration": 30
+    }
   }
+
 }

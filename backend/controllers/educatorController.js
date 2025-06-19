@@ -4,7 +4,7 @@ import {v2 as cloudinary} from 'cloudinary';
 
 
 //update role to educator
-export const updateRoleToEducator = async ()=> {
+export const updateRoleToEducator = async (req, res)=> {
     try {
         const userId = req.auth.userId
 
