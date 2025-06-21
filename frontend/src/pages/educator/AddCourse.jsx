@@ -1,12 +1,17 @@
-import React, { useEffect, useRef, useState } from 'react'
-import uniqid from 'uniqid';
+import React, { useEffect, useRef, useState, useContext } from 'react';
 import Quill from 'quill';
+import 'quill/dist/quill.snow.css'; 
 import { assets } from '../../assets/assets';
+import { AppContext } from '../../context/AppContext';
+import { toast } from 'react-toastify';
+import axios from 'axios'; 
 
 const AddCourse = () => {
 
+  const { backendUrl, getToken } = useContext(AppContext)
   const quillRef = useRef(null);
   const editorRef = useRef(null);
+  
 
 
   const [courseTitle, setCourseTitle] = useState ('')
@@ -91,8 +96,45 @@ const addLecture = () => {
 };
 
   const handleSubmit = async (e) => {
-    e.preventDefault()
-  }
+    try {
+      e.preventDefault()
+      if(!image){
+        toast.error('Thumbnail Not Selected')
+      }
+
+      const courseData = {
+        courseTitle,
+        courseDescription: quillRef.current.root.innerHtml, 
+        coursePrice: Number(coursePrice),
+        discount: Number(discount),
+        coursecontent: chapters,
+      }
+
+      const formData = new FormData()
+      formData.append('courseData', JSON.stringify(courseData))
+      formData.append('image', image)
+
+      const token = await getToken()
+      const {data} = await axios.post(backendUrl + '/api/educator/add-course', formData, {headers: { Authorization: `Bearer ${token}`}})
+
+      if (data.success){
+        toast.success(data.message)
+        setCourseTitle('')
+        setCoursePrice(0)
+        setDiscount(0)
+        setImage(null)
+        setChapters([])
+        quillRef.current.root.innerHTML = ""
+      }else {
+        toast.error(error.message)
+      }
+
+    } catch (error) {
+      toast.error(error.message)
+    }
+    
+    }
+  
 
   useEffect(()=> {
     if (!quillRef.current && editorRef.current) {
@@ -233,12 +275,13 @@ const addLecture = () => {
           <button type='submit' className='bg-black text-white w-max py-2.5 px-8 rounded my-4'>
             ADD
           </button>
+        
 
        
        </form>
       </div>
 
   )
-}
+};
 
 export default AddCourse;
